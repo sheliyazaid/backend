@@ -11,6 +11,7 @@ import memberRoutes from './routes/memberRoutes.js';
 import importExportRoutes from './routes/importExportRoutes.js';
 import parkingRoutes from './routes/parkingRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import visitorRoutes from './routes/visitorRoutes.js';
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use('/api/members', memberRoutes);
 app.use('/api/import-export', importExportRoutes);
 app.use('/api/parking', parkingRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/visitors', visitorRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

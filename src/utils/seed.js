@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import User from '../models/User.js';
+import Flat from '../models/Flat.js';
 import Tag from '../models/Tag.js';
 import { connectDB } from '../config/db.js';
 
@@ -44,7 +45,27 @@ const seed = async () => {
   }
   console.log('Default tags ready');
 
-  console.log('Seed completed — no sample flats or parking data');
+  const admin = await User.findOne({ email: 'admin@society.com' });
+  let demoFlat = await Flat.findOne({ flatNumber: 'A-101' });
+  if (!demoFlat && admin) {
+    demoFlat = await Flat.create({
+      flatNumber: 'A-101',
+      wing: 'A',
+      floor: 1,
+      flatStatus: 'Occupied',
+      createdBy: admin._id,
+    });
+    console.log('Created demo flat A-101');
+  }
+
+  const resident = await User.findOne({ email: 'resident@society.com' });
+  if (resident && demoFlat && !resident.flatId) {
+    resident.flatId = demoFlat._id;
+    await resident.save();
+    console.log('Linked demo resident to flat A-101');
+  }
+
+  console.log('Seed completed');
   await mongoose.disconnect();
 };
 
